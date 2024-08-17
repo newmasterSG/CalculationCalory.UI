@@ -1,0 +1,99 @@
+import { Button, IconButton, TextField, } from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useState } from 'react';
+import { MealItem } from '../../../models/mealItem';
+
+interface AddProductViewProps {
+    handleViewChange: (change: boolean) => void;
+}
+
+export const AddProductView: React.FC<AddProductViewProps> = ({ handleViewChange }) => {
+    const [formData, setFormData] = useState<MealItem>({
+        id: 0,
+        name: '',
+        protein: 0,
+        fat: 0,
+        carb: 0,
+    });
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, value } = event.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [id]: id === 'name' ? value : parseFloat(value), // Convert to number if not 'name'
+        }));
+    };
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        // Process the form data here
+        console.log('Form Data:', formData);
+    };
+
+
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+                <Grid xs={4}>
+                    <IconButton onClick={() => handleViewChange(false)}>
+                        <ArrowBackIcon />
+                    </IconButton>
+                </Grid>
+                <Grid xs={12} sm={6}>
+                    <TextField
+                        required
+                        id="name"
+                        label="Product Name"
+                        variant="outlined"
+                        fullWidth
+                        value={formData.name}
+                        onChange={handleChange}
+                    />
+                </Grid>
+                <Grid xs={12} sm={6}>
+                    <TextField
+                        required
+                        id="protein"
+                        label="Protein (g)"
+                        variant="outlined"
+                        type="number"
+                        fullWidth
+                        value={formData.protein}
+                        onChange={handleChange}
+                    />
+                </Grid>
+                <Grid xs={12} sm={6}>
+                    <TextField
+                        required
+                        id="fat"
+                        label="Fat (g)"
+                        variant="outlined"
+                        type="number"
+                        fullWidth
+                        value={formData.fat}
+                        onChange={handleChange}
+                    />
+                </Grid>
+                <Grid xs={12} sm={6}>
+                    <TextField
+                        required
+                        id="carb"
+                        label="Carbohydrates (g)"
+                        variant="outlined"
+                        type="number"
+                        fullWidth
+                        value={formData.carb}
+                        onChange={handleChange}
+                    />
+                </Grid>
+                <Grid xs={12}>
+                    <Button type="submit" variant="contained" color="primary">
+                        Submit
+                    </Button>
+                </Grid>
+            </Grid>
+        </form>
+    );
+}

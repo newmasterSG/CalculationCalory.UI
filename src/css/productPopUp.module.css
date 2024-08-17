@@ -1,0 +1,4 @@
+.productItem:hover {
+    cursor: pointer;
+    background-color: #D3D3D3;
+}
