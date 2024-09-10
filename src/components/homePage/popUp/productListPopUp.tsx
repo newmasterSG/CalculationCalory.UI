@@ -1,8 +1,9 @@
-import { ListItem, ListItemText, List, Box, IconButton, TextField } from "@mui/material";
+import { ListItem, ListItemText, List, IconButton, TextField } from "@mui/material";
 import { MealItem } from "../../../models/mealItem"
 import styles from '../../../css/productPopUp.module.css'
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from "react";
+import Box from '@mui/material/Box';
 
 interface ListProductProps {
     items: MealItem[];

@@ -3,12 +3,16 @@ import Grid from '@mui/material/Unstable_Grid2';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useState } from 'react';
 import { MealItem } from '../../../models/mealItem';
+import Box from '@mui/material/Box';
+import { useCreateProductMutation } from '../../../api/productApi';
+import { CreateProductDTO } from '../../../models/product';
 
 interface AddProductViewProps {
     handleViewChange: (change: boolean) => void;
 }
 
 export const AddProductView: React.FC<AddProductViewProps> = ({ handleViewChange }) => {
+    const [createProduct] = useCreateProductMutation();
     const [formData, setFormData] = useState<MealItem>({
         id: 0,
         name: '',
@@ -25,10 +29,22 @@ export const AddProductView: React.FC<AddProductViewProps> = ({ handleViewChange
         }));
     };
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         // Process the form data here
-        console.log('Form Data:', formData);
+        const newProduct: CreateProductDTO = {
+            name: formData.name,
+            protein: formData.protein,
+            fat: formData.fat,
+            carb: formData.carb,
+        }
+
+        try {
+            await createProduct({ productDTO: newProduct }).unwrap();
+            alert('Product created successfully!');
+          } catch (error) {
+            alert('Failed to create product.');
+          }
     };
 
 

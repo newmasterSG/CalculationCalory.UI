@@ -1,11 +1,11 @@
-import { Dialog, DialogTitle, DialogContent, TextField, Button, List, ListItem, ListItemText, DialogActions, Box, IconButton } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, TextField, Button, List, ListItem, ListItemText, DialogActions, IconButton } from "@mui/material";
 import { useState } from "react";
 import { MealItem, MealType } from "../../../models/mealItem";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
 import { addMealItem } from "../../../store/slicers/mealSlicer";
 import { ListProductPopUp } from "./productListPopUp";
 import { AddProductView } from "./addProductView";
-
+import Box from '@mui/material/Box';
 
 interface ProductPopupProps {
   open: boolean;

@@ -6,6 +6,9 @@ import store from '../store/mainStore'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import UserProfile from "./userProfileComponent/userProfile";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import AuthGuard from "./AuthComponents/AuthGuard";
+import Login from "./userProfileComponent/login";
+import Register from "./userProfileComponent/register";
 
 const MainComponent: React.FC = () => {
     const [open, setOpen] = React.useState(false);
@@ -27,7 +30,14 @@ const MainComponent: React.FC = () => {
                 <Router>
                     <Sidebar isOpen={open} toggleDrawer={toggleDrawer} />
                     <Routes>
-                        <Route path="/" element={<Home />} />
+                        <Route
+                            path="/"
+                            element={
+                                <AuthGuard element={<Home />} />
+                            }
+                        />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
                         <Route path="/userprofile" element={<UserProfile />} />
                     </Routes>
                 </Router>

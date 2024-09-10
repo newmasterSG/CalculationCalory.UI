@@ -1,10 +1,8 @@
-import { useState } from "react";
-import { MealItem, MealType } from "../../models/mealItem";
-import Box from "@mui/material/Box/Box";
+import { MealType } from "../../models/mealItem";
 import { MealList } from "./mealList";
-import ProductPopup from "./popUp/productPopup";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { removeMealItem } from "../../store/slicers/mealSlicer";
+import Box from "@mui/material/Box/Box";
 
 export const MealTracker: React.FC = () => {
     const dispatch = useAppDispatch();

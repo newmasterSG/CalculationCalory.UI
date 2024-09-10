@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
-import Box from "@mui/material/Box/Box";
 import CircularProgress, { CircularProgressProps } from "@mui/material/CircularProgress/CircularProgress";
+import Box from '@mui/material/Box';
 
 function CircularProgressWithLabel(
     props: CircularProgressProps & { value: number },
