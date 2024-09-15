@@ -4,7 +4,7 @@ import { baseUrl } from "../constants";
 
 export const authApi = createApi({
     reducerPath: 'authApi',
-    baseQuery: fetchBaseQuery({ baseUrl: `${baseUrl}` }), 
+    baseQuery: fetchBaseQuery({ baseUrl: `${baseUrl}auth` }), 
     endpoints: (builder) => ({
         
       register: builder.mutation<void, RegisterRequest>({
@@ -23,7 +23,15 @@ export const authApi = createApi({
           body: loginData,
         }),
       }),
+
+      refreshToken: builder.mutation<AuthResponse, AuthResponse>({
+        query: (token) => ({
+          url: 'refresh-token',
+          method: 'POST',
+          body: token
+        })
+      })
     }),
   });
   
-  export const { useRegisterMutation, useLoginMutation } = authApi;
+  export const { useRegisterMutation, useLoginMutation, useRefreshTokenMutation } = authApi;

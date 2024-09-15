@@ -25,7 +25,7 @@ export const AddProductView: React.FC<AddProductViewProps> = ({ handleViewChange
         const { id, value } = event.target;
         setFormData((prevData) => ({
             ...prevData,
-            [id]: id === 'name' ? value : parseFloat(value), // Convert to number if not 'name'
+            [id]: id === 'name' ? value : value === '' ? 0 : parseFloat(value),
         }));
     };
 
@@ -42,9 +42,9 @@ export const AddProductView: React.FC<AddProductViewProps> = ({ handleViewChange
         try {
             await createProduct({ productDTO: newProduct }).unwrap();
             alert('Product created successfully!');
-          } catch (error) {
+        } catch (error) {
             alert('Failed to create product.');
-          }
+        }
     };
 
 
@@ -78,6 +78,7 @@ export const AddProductView: React.FC<AddProductViewProps> = ({ handleViewChange
                         fullWidth
                         value={formData.protein}
                         onChange={handleChange}
+                        inputProps={{ min: "0" }}
                     />
                 </Grid>
                 <Grid xs={12} sm={6}>
@@ -90,6 +91,7 @@ export const AddProductView: React.FC<AddProductViewProps> = ({ handleViewChange
                         fullWidth
                         value={formData.fat}
                         onChange={handleChange}
+                        inputProps={{ min: "0" }}
                     />
                 </Grid>
                 <Grid xs={12} sm={6}>
@@ -102,6 +104,7 @@ export const AddProductView: React.FC<AddProductViewProps> = ({ handleViewChange
                         fullWidth
                         value={formData.carb}
                         onChange={handleChange}
+                        inputProps={{ min: "0" }}
                     />
                 </Grid>
                 <Grid xs={12}>

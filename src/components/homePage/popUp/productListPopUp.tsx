@@ -4,9 +4,10 @@ import styles from '../../../css/productPopUp.module.css'
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from "react";
 import Box from '@mui/material/Box';
+import { ProductDTO } from "../../../models/product";
 
 interface ListProductProps {
-    items: MealItem[];
+    items: ProductDTO[];
     handleAddProductToList: (product: MealItem) => void;
     handleNewView: (active: boolean) => void;
 }

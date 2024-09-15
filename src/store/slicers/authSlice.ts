@@ -18,14 +18,14 @@ const authSlice = createSlice({
         setTokens(state, action: PayloadAction<{ accessToken: string; refreshToken: string }>) {
             state.accessToken = action.payload.accessToken;
             state.refreshToken = action.payload.refreshToken;
-            // Сохраняем токены в localStorage
+
             localStorage.setItem('accessToken', state.accessToken);
             localStorage.setItem('refreshToken', state.refreshToken);
         },
         clearTokens(state) {
             state.accessToken = null;
             state.refreshToken = null;
-            // Удаляем токены из localStorage
+            
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
         },

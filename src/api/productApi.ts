@@ -1,10 +1,10 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import { CreateProductCommand, ProductDTO } from '../models/product';
-import { baseUrl } from '../constants';
+import { baseQueryWithReauth } from './basesQueries/baseQueryWithReauth';
 
 export const productApi = createApi({
     reducerPath: 'api',
-    baseQuery: fetchBaseQuery({ baseUrl: `${baseUrl}` }),
+    baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
         getProducts: builder.query<ProductDTO[], void>({
             query: () => 'products',
