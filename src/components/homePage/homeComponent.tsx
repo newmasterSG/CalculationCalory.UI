@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Container, Paper, Typography, Button } from "@mui/material";
 import CircularProgressWithLabel from '../customComponents/circularProgressWithLabel';
 import { ListNutrinion } from './listNutrionComponent';
-import ProductPopup from './popUp/productPopup';
 import { MealTracker } from './mealTracker';
 import { useAppSelector } from '../../hooks/reduxHooks';
 import { RootState } from '../../store/mainStore';

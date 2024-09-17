@@ -3,12 +3,16 @@ import Grid from '@mui/material/Unstable_Grid2';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useState } from 'react';
 import { MealItem } from '../../../models/mealItem';
+import Box from '@mui/material/Box';
+import { useCreateProductMutation } from '../../../api/productApi';
+import { CreateProductDTO } from '../../../models/product';
 
 interface AddProductViewProps {
     handleViewChange: (change: boolean) => void;
 }
 
 export const AddProductView: React.FC<AddProductViewProps> = ({ handleViewChange }) => {
+    const [createProduct] = useCreateProductMutation();
     const [formData, setFormData] = useState<MealItem>({
         id: 0,
         name: '',
@@ -21,14 +25,26 @@ export const AddProductView: React.FC<AddProductViewProps> = ({ handleViewChange
         const { id, value } = event.target;
         setFormData((prevData) => ({
             ...prevData,
-            [id]: id === 'name' ? value : parseFloat(value), // Convert to number if not 'name'
+            [id]: id === 'name' ? value : value === '' ? 0 : parseFloat(value),
         }));
     };
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         // Process the form data here
-        console.log('Form Data:', formData);
+        const newProduct: CreateProductDTO = {
+            name: formData.name,
+            protein: formData.protein,
+            fat: formData.fat,
+            carb: formData.carb,
+        }
+
+        try {
+            await createProduct({ productDTO: newProduct }).unwrap();
+            alert('Product created successfully!');
+        } catch (error) {
+            alert('Failed to create product.');
+        }
     };
 
 
@@ -62,6 +78,7 @@ export const AddProductView: React.FC<AddProductViewProps> = ({ handleViewChange
                         fullWidth
                         value={formData.protein}
                         onChange={handleChange}
+                        inputProps={{ min: "0" }}
                     />
                 </Grid>
                 <Grid xs={12} sm={6}>
@@ -74,6 +91,7 @@ export const AddProductView: React.FC<AddProductViewProps> = ({ handleViewChange
                         fullWidth
                         value={formData.fat}
                         onChange={handleChange}
+                        inputProps={{ min: "0" }}
                     />
                 </Grid>
                 <Grid xs={12} sm={6}>
@@ -86,6 +104,7 @@ export const AddProductView: React.FC<AddProductViewProps> = ({ handleViewChange
                         fullWidth
                         value={formData.carb}
                         onChange={handleChange}
+                        inputProps={{ min: "0" }}
                     />
                 </Grid>
                 <Grid xs={12}>

@@ -1,9 +1,10 @@
-import { Box, Typography, List, ListItem, ListItemText, IconButton, Container } from "@mui/material";
+import { Typography, List, ListItem, ListItemText, IconButton, Container } from "@mui/material";
 import { MealItem, MealType } from "../../models/mealItem";
 import AddIcon from '@mui/icons-material/Add';
 import ProductPopup from "./popUp/productPopup";
 import { useState } from "react";
 import RemoveIcon from '@mui/icons-material/Remove';
+import Box from '@mui/material/Box';
 
 interface MealProps {
   meal: MealType;

@@ -1,10 +1,10 @@
-import { Box } from "@mui/material"
 import Grid from '@mui/material/Unstable_Grid2';
 import NutrientColumn from "../customComponents/nutrientColumn"
 import { GridItemC } from "../styledComponents/gridItem"
 import { Nutrients } from "../../models/nutrientData";
 import { useAppSelector } from "../../hooks/reduxHooks";
 import { MealType } from "../../models/mealItem";
+import Box from '@mui/material/Box';
 
 
 export const ListNutrinion: React.FC = () => {
