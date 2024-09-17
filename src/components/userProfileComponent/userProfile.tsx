@@ -1,14 +1,20 @@
 import { useState } from "react";
 import { Goal, GoalLabels } from "../../models/goal";
-import { UserProfile } from "../../models/user";
+import { ActivityLevel, ActivityLevelLabels, Gender, GenderLabels, UserProfile } from "../../models/user";
 import { FormControl, InputLabel, Select, MenuItem, TextField, Button, SelectChangeEvent } from "@mui/material";
+import { useUserProfileUpdateMutation } from "../../api/userApi";
+import { UpdateUserCommand } from "../../api/commands/user/UpdateUserCommand";
+import { getEnumByLabel } from "../../helpers/mapperHelper";
 
 const UserProfileComponent: React.FC = () => {
+    const [updateProfile] = useUserProfileUpdateMutation();
+
     const [profile, setProfile] = useState<UserProfile>({
-        gender: '',
+        gender: Gender.Male,
         height: 0,
         weight: 0,
         goal: Goal.MaintainWeight,
+        activityLevel: ActivityLevel.LightlyActive
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -19,16 +25,47 @@ const UserProfileComponent: React.FC = () => {
         }));
     };
 
-    const handleGoalChange = (event: SelectChangeEvent<Goal>) => {
-        setProfile(prevProfile => ({
-            ...prevProfile,
-            goal: event.target.value as Goal
-        }));
+    const handleGoalChange = (event: SelectChangeEvent<string>) => {
+        const selectedGoal = getEnumByLabel<Goal>(event.target.value, GoalLabels);
+        if (selectedGoal !== undefined) {
+            setProfile(prevProfile => ({
+                ...prevProfile,
+                goal: selectedGoal,
+            }));
+        }
     };
 
-    const handleSubmit = () => {
-        console.log('Profile updated:', profile);
-        // Здесь можно добавить логику отправки данных на сервер
+    const handleGenderChange = (event: SelectChangeEvent<string>) => {
+        const selectedGender = getEnumByLabel<Gender>(event.target.value, GenderLabels);
+        if(selectedGender !== undefined){
+            setProfile({
+                ...profile,
+                gender: selectedGender,
+            });
+        }
+    };
+
+    const handleActivityLevelChange = (event: SelectChangeEvent<string>) => {
+        const selectedActivity = getEnumByLabel<ActivityLevel>(event.target.value, ActivityLevelLabels);
+        if(selectedActivity !== undefined){
+            setProfile({
+                ...profile,
+                activityLevel: selectedActivity,
+            });
+        }
+    };
+
+    const handleSubmit = async () => {
+        const updModel: UpdateUserCommand = {
+            upd: profile
+        };
+
+        try {
+            var result = await updateProfile(updModel).unwrap();
+        }
+        catch {
+
+        }
     };
 
     return (
@@ -37,7 +74,7 @@ const UserProfileComponent: React.FC = () => {
                 <InputLabel id="goal-select-label">Goal</InputLabel>
                 <Select
                     labelId="goal-select-label"
-                    value={profile.goal}
+                    value={GoalLabels[profile.goal]}
                     onChange={handleGoalChange}
                 >
                     {Object.values(GoalLabels).map(goal => (
@@ -48,14 +85,35 @@ const UserProfileComponent: React.FC = () => {
                 </Select>
             </FormControl>
 
-            <TextField
-                fullWidth
-                margin="normal"
-                label="Gender"
-                name="gender"
-                value={profile.gender}
-                onChange={handleChange}
-            />
+            <FormControl fullWidth margin="normal">
+                <InputLabel id="gender-select-label">Gender</InputLabel>
+                <Select
+                    labelId="goal-select-label"
+                    value={GenderLabels[profile.gender]}
+                    onChange={handleGenderChange}
+                >
+                    {Object.values(GenderLabels).map(gender => (
+                        <MenuItem key={gender} value={gender}>
+                            {gender}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+
+            <FormControl fullWidth margin="normal">
+                <InputLabel id="activityLevel-select-label">Activity Level</InputLabel>
+                <Select
+                    labelId="activityLevel-select-label"
+                    value={ActivityLevelLabels[profile.activityLevel]}
+                    onChange={handleActivityLevelChange}
+                >
+                    {Object.values(ActivityLevelLabels).map(level => (
+                        <MenuItem key={level} value={level}>
+                            {level}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
 
             <TextField
                 fullWidth

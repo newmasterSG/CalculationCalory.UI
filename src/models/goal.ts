@@ -1,7 +1,7 @@
 export enum Goal {
-    MaintainWeight = 1,
-    GainWeight = 2,
-    LoseWeight = 3
+    MaintainWeight = 0,
+    GainWeight = 1,
+    LoseWeight = 2
 }
 
 export const GoalLabels: { [key in Goal]: string } = {
