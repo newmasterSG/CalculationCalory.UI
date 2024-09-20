@@ -1,18 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Paper, Typography, Button } from "@mui/material";
 import CircularProgressWithLabel from '../customComponents/circularProgressWithLabel';
 import { ListNutrinion } from './listNutrionComponent';
 import { MealTracker } from './mealTracker';
-import { useAppSelector } from '../../hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { RootState } from '../../store/mainStore';
-
+import { useGetDailyPlanQuery } from '../../api/nutritionApi';
+import { addGeneralCal } from "../../store/slicers/mealSlicer";
+import { NutrientData } from '../../models/nutrientData';
 
 
 
 const Home: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const [nutrients, setNutrients] = useState<NutrientData[]>([]);
+
+
+  const { data, isLoading, error } = useGetDailyPlanQuery();
+
+  useEffect(() => {
+    if (data) {
+      const [fetchedNutrients, fetchedCalories] = data;
+      setNutrients(fetchedNutrients);
+      dispatch(addGeneralCal(fetchedCalories));
+    }
+  }, [data, dispatch]);
+
   const generalCalories: number = useAppSelector((state: RootState) => state.meals.generalCal);
 
   const calculationNorm = generalCalories / 1500 * 100;
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error occurred</div>;
 
   return (
     <Container component="main" maxWidth="sm">
@@ -22,11 +41,13 @@ const Home: React.FC = () => {
         </Typography>
         <CircularProgressWithLabel variant="determinate" sx={{ height: '200px !important', width: '200px !important' }} value={calculationNorm} />
       </Paper>
-      <MealTracker/>
-      <ListNutrinion></ListNutrinion>
-      
+      <MealTracker />
+      <ListNutrinion nutrients={nutrients}></ListNutrinion>
+
     </Container>
   );
 };
 
 export default Home;
+
+
