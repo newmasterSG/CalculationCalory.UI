@@ -72,5 +72,5 @@ const mealsSlice = createSlice({
     },
 });
 
-export const { setMealItems, addMealItem, removeMealItem } = mealsSlice.actions;
+export const { setMealItems, addMealItem, removeMealItem, addGeneralCal } = mealsSlice.actions;
 export default mealsSlice.reducer;

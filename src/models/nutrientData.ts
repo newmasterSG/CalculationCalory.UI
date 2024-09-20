@@ -7,4 +7,5 @@ export enum Nutrients {
 export interface NutrientData {
     name: Nutrients;
     value: number; // The value could be a percentage or a numeric amount
+    maxValue: number;
 }
