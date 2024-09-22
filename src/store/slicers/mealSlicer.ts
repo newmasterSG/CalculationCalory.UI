@@ -11,6 +11,7 @@ interface MealsState {
     proteinCal: number;
     fatCal: number;
     carbCal: number;
+    totalEatCal: number
 }
 
 const initialState: MealsState = {
@@ -26,6 +27,7 @@ const initialState: MealsState = {
     proteinCal: 0,
     fatCal: 0,
     carbCal: 0,
+    totalEatCal: 0,
 };
 
 const mealsSlice = createSlice({
@@ -38,10 +40,10 @@ const mealsSlice = createSlice({
         },
         addMealItem(state, action: PayloadAction<{ type: MealType; item: MealItem }>) {
             const { type, item } = action.payload;
-            state.generalCal += CalculationHelper.calculateCalories(item);
+            state.totalEatCal += CalculationHelper.calculateCalories(item);
 
-            const newId = Math.max(state.lastUsedId[type], item.id);
-            state.lastUsedId[type] = newId;
+            const uniqueId = state.lastUsedId[type] + 1;
+            state.lastUsedId[type] = uniqueId;
 
             state.proteinCal += item.protein;
             state.carbCal += item.carb;
@@ -51,23 +53,23 @@ const mealsSlice = createSlice({
         },
         removeMealItem(state, action: PayloadAction<{ type: MealType; id: number }>) {
             const { type, id } = action.payload;
-            let item = state[type].find(item => item.id === id);
+            let item = state[type].find(item => item.uniqueId === id);
             if (!item) {
                 return;
             }
 
-            state.generalCal -= CalculationHelper.calculateCalories(item);
-            state[type] = state[type].filter(item => item.id !== id);
+            state.totalEatCal -= CalculationHelper.calculateCalories(item);
+            state[type] = state[type].filter(item => item.uniqueId !== id);
         },
         addGeneralCal(state, action: PayloadAction<number>) {
-            state.generalCal += action.payload;
+            state.generalCal = action.payload;
         },
         removeGeneralCal(state, action: PayloadAction<number>) {
             if (state.generalCal <= 0) {
                 return;
             }
 
-            state.generalCal -= action.payload;
+            state.totalEatCal -= action.payload;
         }
     },
 });

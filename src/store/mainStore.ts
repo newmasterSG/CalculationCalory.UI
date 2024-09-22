@@ -5,6 +5,7 @@ import { authApi } from '../api/authApi';
 import authSlice from './slicers/authSlice';
 import { userApi } from '../api/userApi';
 import { nutritionApi } from '../api/nutritionApi';
+import { dailyLogApi } from '../api/dailylogApi';
 
 const store = configureStore({
     reducer: {
@@ -13,10 +14,11 @@ const store = configureStore({
         [authApi.reducerPath] : authApi.reducer,
         auth: authSlice,
         [userApi.reducerPath]: userApi.reducer,
-        [nutritionApi.reducerPath]: nutritionApi.reducer
+        [nutritionApi.reducerPath]: nutritionApi.reducer,
+        [dailyLogApi.reducerPath] : dailyLogApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(productApi.middleware, authApi.middleware, userApi.middleware, nutritionApi.middleware),
+        getDefaultMiddleware().concat(productApi.middleware, authApi.middleware, userApi.middleware, nutritionApi.middleware, dailyLogApi.middleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>;

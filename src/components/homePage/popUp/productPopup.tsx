@@ -8,6 +8,7 @@ import { AddProductView } from "./addProductView";
 import Box from '@mui/material/Box';
 import { ProductDTO } from "../../../models/product";
 import { useGetProductsQuery } from "../../../api/productApi";
+import { addMealDailyLogAsync } from "../../../thunk/addMealDailyLogAsync";
 
 interface ProductPopupProps {
   open: boolean;
@@ -23,10 +24,15 @@ const ProductPopup: React.FC<ProductPopupProps> = ({ open, onClose, meal }) => {
 
   const lastIdByType = useAppSelector((state) => state.meals.lastUsedId[meal]);
 
-  const handleAddProductToList = (item: MealItem) => {
-    const newItem = { ...item, id: lastIdByType + 1 };
+  const handleAddProductToList = async (item: MealItem) => {
+    const newItem = { ...item, uniqueId: lastIdByType + 1 };
+    
+    try {
+      await dispatch(addMealDailyLogAsync({ type: meal, item: newItem })).unwrap();
+    }
+    catch {
 
-    dispatch(addMealItem({ type: meal, item: newItem }))
+    }
   }
 
   const handleNewView = (changeState: boolean) => {

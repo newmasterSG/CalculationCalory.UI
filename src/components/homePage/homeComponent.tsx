@@ -8,6 +8,8 @@ import { RootState } from '../../store/mainStore';
 import { useGetDailyPlanQuery } from '../../api/nutritionApi';
 import { addGeneralCal } from "../../store/slicers/mealSlicer";
 import { NutrientData } from '../../models/nutrientData';
+import { MealType } from '../../models/mealItem';
+import CalculationHelper from '../../helpers/calculationHelper';
 
 
 
@@ -28,7 +30,9 @@ const Home: React.FC = () => {
 
   const generalCalories: number = useAppSelector((state: RootState) => state.meals.generalCal);
 
-  const calculationNorm = generalCalories / 1500 * 100;
+  const totalCal = useAppSelector((state) => state.meals.totalEatCal);
+
+  const calculationNorm =  totalCal / generalCalories * 100;
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error occurred</div>;

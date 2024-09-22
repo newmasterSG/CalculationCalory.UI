@@ -1,8 +1,8 @@
 import { MealType } from "../../models/mealItem";
 import { MealList } from "./mealList";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import { removeMealItem } from "../../store/slicers/mealSlicer";
 import Box from "@mui/material/Box/Box";
+import { removeMealDailyLogAsync } from "../../thunk/removeMealDailyLogAsync";
 
 export const MealTracker: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -11,8 +11,13 @@ export const MealTracker: React.FC = () => {
     const lunchItems = useAppSelector((state) => state.meals[MealType.LUNCH]);
     const dinnerItems = useAppSelector((state) => state.meals[MealType.DINNER]);
 
-    const deleteItemFromMeal = (meal: MealType, id: number) => {
-        dispatch(removeMealItem({type: meal, id: id}));
+    const deleteItemFromMeal = async (meal: MealType, id: number) => {
+        try {
+          await dispatch(removeMealDailyLogAsync({type: meal, id: id}));
+        }
+        catch {
+
+        }
     }
 
     return (
