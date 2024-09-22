@@ -2,7 +2,7 @@ import { ListItem, ListItemText, List, IconButton, TextField } from "@mui/materi
 import { MealItem } from "../../../models/mealItem"
 import styles from '../../../css/productPopUp.module.css'
 import AddIcon from '@mui/icons-material/Add';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Box from '@mui/material/Box';
 import { ProductDTO } from "../../../models/product";
 
@@ -19,6 +19,12 @@ export const ListProductPopUp: React.FC<ListProductProps> = ({ items, handleAddP
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(search.toLowerCase())
     );
+
+    useEffect(() => {
+        if (!items) {
+            setProducts(items);
+        }
+    }, [items])
 
     return (
         <>

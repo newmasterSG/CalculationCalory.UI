@@ -31,7 +31,7 @@ export const MealList: React.FC<MealProps> = ({ meal, items, deleteItem }) => {
         {items.map((item, index) => (
           <ListItem key={index}>
             <ListItemText primary={item.name} />
-            <IconButton onClick={() => deleteItem(meal, item.id)}>
+            <IconButton onClick={() => deleteItem(meal, item.uniqueId!)}>
               <RemoveIcon />
             </IconButton>
           </ListItem>
