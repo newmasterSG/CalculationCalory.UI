@@ -1,6 +1,6 @@
 import { AddProductToDailyLogCommand } from "../api/commands/dailyLog/AddProductToDailyLogCommand";
 import { DeleteProductDTO } from "../api/commands/dailyLog/DeleteProductFromDailyLogByUserCommand";
-import { MealItem, MealType } from "../models/mealItem";
+import { MealItem, MealType, MealTypeNumbers } from "../models/mealItem";
 
 export function getEnumByLabel<T extends string | number>(
   label: string,
@@ -28,13 +28,26 @@ export const mapMealItemToAddProductCommand = (
 };
 
 export function mapToDeleteProductDTO(
-  mealItemId: number, 
-  mealType: number, 
+  mealItemId: number,
+  mealType: number,
   date: Date
 ): DeleteProductDTO {
   return {
-      productId: mealItemId,
-      mealType: mealType,
-      creationDate: date,
+    productId: mealItemId,
+    mealType: mealType,
+    creationDate: date,
   };
 }
+
+export const getMealTypeByNumber = (mealType: number): MealType => {
+  switch (mealType) {
+    case MealTypeNumbers[MealType.BREAKFAST]:
+      return MealType.BREAKFAST;
+    case MealTypeNumbers[MealType.LUNCH]:
+      return MealType.LUNCH;
+    case MealTypeNumbers[MealType.DINNER]:
+      return MealType.DINNER;
+    default:
+      throw new Error('Invalid meal type');
+  }
+};

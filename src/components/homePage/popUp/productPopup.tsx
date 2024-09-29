@@ -39,13 +39,6 @@ const ProductPopup: React.FC<ProductPopupProps> = ({ open, onClose, meal }) => {
     setNewView(changeState);
   }
 
-  // const handleAddProduct = () => {
-  //   if (newProduct.trim()) {
-  //     setProducts([...products, newProduct.trim()]);
-  //     setNewProduct('');
-  //   }
-  // };
-
   if (isLoading) return <p>Loading...</p>;
 
   return (
