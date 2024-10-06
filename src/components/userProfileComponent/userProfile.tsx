@@ -5,6 +5,7 @@ import { FormControl, InputLabel, Select, MenuItem, TextField, Button, SelectCha
 import { useUserProfileUpdateMutation } from "../../api/userApi";
 import { UpdateUserCommand } from "../../api/commands/user/UpdateUserCommand";
 import { getEnumByLabel } from "../../helpers/mapperHelper";
+import React from "react";
 
 const UserProfileComponent: React.FC = () => {
     const [updateProfile] = useUserProfileUpdateMutation();

@@ -4,6 +4,7 @@ import { addMealItem } from "../store/slicers/mealSlicer";
 import { dailyLogApi } from "../api/dailylogApi";
 import { mapMealItemToAddProductCommand } from "../helpers/mapperHelper";
 import { AddProductToDailyLogCommand } from "../api/commands/dailyLog/AddProductToDailyLogCommand";
+import { baseGrammPerDish } from "../constants";
 
 export const addMealDailyLogAsync = createAsyncThunk(
     'meals/addMealDailyLogAsync',
@@ -11,7 +12,7 @@ export const addMealDailyLogAsync = createAsyncThunk(
 
         dispatch(addMealItem(payload));
 
-        const command: AddProductToDailyLogCommand = mapMealItemToAddProductCommand(payload.item, 1, MealTypeNumbers[payload.type], new Date());
+        const command: AddProductToDailyLogCommand = mapMealItemToAddProductCommand(payload.item, baseGrammPerDish, MealTypeNumbers[payload.type], new Date());
 
         try {
             await dispatch(dailyLogApi.endpoints.addMealItemToLog.initiate(command));

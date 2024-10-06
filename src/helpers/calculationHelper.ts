@@ -10,4 +10,8 @@ export default class CalculationHelper {
         
         return proteinCalories + fatCalories + carbCalories;
     }
+
+    public static calculateNormCaloriesPerPerson(totalCal: number, generalCalories: number) : number {
+        return totalCal / generalCalories * 100;
+    }
 }

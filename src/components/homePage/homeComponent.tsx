@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Paper, Typography, Button } from "@mui/material";
 import CircularProgressWithLabel from '../customComponents/circularProgressWithLabel';
 import { ListNutrinion } from './listNutrionComponent';
-import { MealTracker } from './mealTracker';
+import MealTracker from './mealTracker';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { RootState } from '../../store/mainStore';
 import { useGetDailyPlanQuery } from '../../api/nutritionApi';
 import { addGeneralCal } from "../../store/slicers/mealSlicer";
 import { NutrientData } from '../../models/nutrientData';
-import { MealType } from '../../models/mealItem';
+import { CALORIES_UPDATE_EVENT } from '../../constants';
 import CalculationHelper from '../../helpers/calculationHelper';
 
 
@@ -16,23 +16,35 @@ import CalculationHelper from '../../helpers/calculationHelper';
 const Home: React.FC = () => {
   const dispatch = useAppDispatch();
   const [nutrients, setNutrients] = useState<NutrientData[]>([]);
-
-
+  const [caloriesNorm, setCaloriesNorm] = useState<number>(0);
   const { data, isLoading, error } = useGetDailyPlanQuery();
+
+  const generalCalories: number = useAppSelector((state: RootState) => state.meals.generalCal);
+
+  const handleCaloriesUpdate = useCallback((event: CustomEvent) => {
+    if (!event.detail.totalEatCal || generalCalories === 0) return;
+
+    const norm = CalculationHelper.calculateNormCaloriesPerPerson(event.detail.totalEatCal, generalCalories);
+    setCaloriesNorm(norm);
+  }, [generalCalories]);
 
   useEffect(() => {
     if (data) {
       const [fetchedNutrients, fetchedCalories] = data;
       setNutrients(fetchedNutrients);
-      dispatch(addGeneralCal(fetchedCalories));
+      if (fetchedCalories) dispatch(addGeneralCal(fetchedCalories));
     }
   }, [data, dispatch]);
 
-  const generalCalories: number = useAppSelector((state: RootState) => state.meals.generalCal);
+  useEffect(() => {
+    if (!generalCalories) return;
 
-  const totalCal = useAppSelector((state) => state.meals.totalEatCal);
+    window.addEventListener(CALORIES_UPDATE_EVENT, handleCaloriesUpdate as EventListener);
 
-  const calculationNorm =  totalCal / generalCalories * 100;
+    return () => {
+      window.removeEventListener(CALORIES_UPDATE_EVENT, handleCaloriesUpdate as EventListener);
+    };
+  }, [generalCalories, handleCaloriesUpdate]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error occurred</div>;
@@ -43,7 +55,7 @@ const Home: React.FC = () => {
         <Typography variant='h5' component="h2" gutterBottom>
           Your daily progress
         </Typography>
-        <CircularProgressWithLabel variant="determinate" sx={{ height: '200px !important', width: '200px !important' }} value={calculationNorm} />
+        <CircularProgressWithLabel variant="determinate" sx={{ height: '200px !important', width: '200px !important' }} value={caloriesNorm} />
       </Paper>
       <MealTracker />
       <ListNutrinion nutrients={nutrients}></ListNutrinion>
@@ -53,5 +65,4 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-
 

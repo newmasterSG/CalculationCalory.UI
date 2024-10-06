@@ -1,20 +1,22 @@
 import { ListItem, ListItemText, List, IconButton, TextField } from "@mui/material";
 import { MealItem } from "../../../models/mealItem"
-import styles from '../../../css/productPopUp.module.css'
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from "react";
 import Box from '@mui/material/Box';
 import { ProductDTO } from "../../../models/product";
+import React from "react";
+import AddProductViewWithQuantity from "./AddProductViewWithQuantity";
 
 interface ListProductProps {
     items: ProductDTO[];
-    handleAddProductToList: (product: MealItem) => void;
+    handleAddProductToList: (product: MealItem, quantity: number) => void;
     handleNewView: (active: boolean) => void;
 }
 
 export const ListProductPopUp: React.FC<ListProductProps> = ({ items, handleAddProductToList, handleNewView }) => {
     const [products, setProducts] = useState(items);
     const [search, setSearch] = useState('');
+    const [selectedProduct, setSelectedProduct] = useState<ProductDTO>();
 
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(search.toLowerCase())
@@ -41,15 +43,16 @@ export const ListProductPopUp: React.FC<ListProductProps> = ({ items, handleAddP
                     <AddIcon></AddIcon>
                 </IconButton>
             </Box>
-            <List>
+            {selectedProduct 
+            ? <AddProductViewWithQuantity product={selectedProduct}  onSubmit={handleAddProductToList}/> 
+            : <List>
                 {filteredProducts.map((product) => (
                     <ListItem key={product.id}
-                        className={styles.productItem}
-                        onClick={(e) => handleAddProductToList(product)}>
+                        onClick={(e) => setSelectedProduct(product)}>
                         <ListItemText primary={product.name} />
                     </ListItem>
                 ))}
-            </List>
+            </List>}
         </>
     )
 }

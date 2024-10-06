@@ -1,23 +1,53 @@
 import React, { useState } from 'react';
 import { useRegisterMutation } from '../../api/authApi';
 import { RegisterRequest } from '../../models/authModels';
-import { Grid, Paper, Typography, TextField, Button } from '@mui/material';
+import { Grid, Paper, Typography, TextField, Button, MenuItem, FormControl, InputLabel, Select, SelectChangeEvent } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { Gender, GenderLabels } from '../../models/user';
+import { getEnumByLabel } from '../../helpers/mapperHelper';
+import RegisterEmailPassword from './RegisterComponents/registerEmailPassword';
+import RegisterProfileDetails from './RegisterComponents/registerProfileDetails';
 
 const Register: React.FC = () => {
   const [register] = useRegisterMutation();
+  const [step, setStep] = useState(1);
   const [registerData, setRegisterData] = useState<RegisterRequest>({
     email: '',
     password: '',
+    confirmPassword: '',
+    firstName: '',
+    lastName: '',
+    gender: Gender.Male,
+    height: 0,
+    weight: 0,
+    age: 0,
   });
+
+
+  const handleGenderChange = (event: SelectChangeEvent<string>) => {
+    const selectedGender = getEnumByLabel<Gender>(event.target.value, GenderLabels);
+    if (selectedGender !== undefined) {
+      setRegisterData({
+        ...registerData,
+        gender: selectedGender,
+      });
+    }
+  };
+  const handleRegisterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRegisterData({ ...registerData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await register(registerData).unwrap();
-      alert('Registration successful!');
-    } catch (error) {
-      alert('Failed to register.');
+    if (step === 1) {
+      setStep(2);
+    } else {
+      try {
+        await register({ ...registerData }).unwrap();
+        alert('Registration successful!');
+      } catch (error) {
+        alert('Failed to register.');
+      }
     }
   };
 
@@ -25,47 +55,22 @@ const Register: React.FC = () => {
     <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '100vh' }}>
       <Paper elevation={3} style={{ padding: 20, maxWidth: 400, width: '100%' }}>
         <Typography variant="h5" gutterBottom>
-          Register
+          {step === 1 ? 'Register' : 'Complete Your Profile'}
         </Typography>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            fullWidth
-            type="email"
-            label="Email"
-            value={registerData.email}
-            onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
-            margin="normal"
-            required
+        {step === 1 ? (
+          <RegisterEmailPassword
+            registerData={registerData}
+            handleRegisterChange={handleRegisterChange}
+            handleSubmit={handleSubmit}
           />
-          <TextField
-            fullWidth
-            type="password"
-            label="Password"
-            value={registerData.password}
-            onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
-            margin="normal"
-            required
+        ) : (
+          <RegisterProfileDetails
+            registerData={registerData}
+            handleRegisterChange={handleRegisterChange}
+            handleGenderChange={handleGenderChange}
+            handleSubmit={handleSubmit}
           />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            style={{ marginTop: 20 }}
-          >
-            Register
-          </Button>
-          <Button
-            component={Link}
-            to="/login"
-            variant="outlined"
-            color="primary"
-            fullWidth
-            style={{ marginTop: 10 }}
-          >
-            Go to Login
-          </Button>
-        </form>
+        )}
       </Paper>
     </Grid>
   );

@@ -20,7 +20,7 @@ export const mapMealItemToAddProductCommand = (
   return {
     dto: {
       productId: mealItem.id,
-      quantity: quantity,
+      quantity: mealItem.quantity || quantity,
       date: date,
       mealType: mealType
     }

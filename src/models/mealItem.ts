@@ -17,4 +17,5 @@ export interface MealItem {
     protein: number;
     fat: number;
     carb: number;
+    quantity?: number;
 }

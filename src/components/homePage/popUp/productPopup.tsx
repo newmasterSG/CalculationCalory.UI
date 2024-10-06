@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import { ProductDTO } from "../../../models/product";
 import { useGetProductsQuery } from "../../../api/productApi";
 import { addMealDailyLogAsync } from "../../../thunk/addMealDailyLogAsync";
+import React from "react";
 
 interface ProductPopupProps {
   open: boolean;
@@ -24,8 +25,8 @@ const ProductPopup: React.FC<ProductPopupProps> = ({ open, onClose, meal }) => {
 
   const lastIdByType = useAppSelector((state) => state.meals.lastUsedId[meal]);
 
-  const handleAddProductToList = async (item: MealItem) => {
-    const newItem = { ...item, uniqueId: lastIdByType + 1 };
+  const handleAddProductToList = async (item: MealItem, quantity: number) => {
+    const newItem = { ...item, uniqueId: lastIdByType + 1, quantity: quantity };
     
     try {
       await dispatch(addMealDailyLogAsync({ type: meal, item: newItem })).unwrap();

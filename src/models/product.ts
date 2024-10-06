@@ -3,6 +3,7 @@ export interface BaseProductDTO {
     protein: number;
     fat: number;
     carb: number;
+    quantity?: number;
 }
 
 export interface ProductDTO extends BaseProductDTO {
@@ -10,8 +11,10 @@ export interface ProductDTO extends BaseProductDTO {
     calories: number;
 }
 
-export interface CreateProductDTO extends BaseProductDTO { }
+export interface CreateProductDTO extends BaseProductDTO { 
+    perGram?: number;
+}
 
 export interface CreateProductCommand {
     productDTO: CreateProductDTO;
-  }
+}
