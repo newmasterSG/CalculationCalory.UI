@@ -6,7 +6,8 @@ function CircularProgressWithLabel(
     props: CircularProgressProps & { value: number },
 ) {
     const getColor = (value: number) => {
-        if (value === 100) return '#4caf50';
+        if (value > 110) return ' #FF0000';
+        if (value >= 110) return '#4caf50';
         if (value >= 50) return '#ffeb3b';
         return '#f44336';
     };

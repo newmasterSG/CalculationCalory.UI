@@ -21,16 +21,16 @@ export const MealList: React.FC<MealProps> = ({ meal, items, deleteItem }) => {
 
   return (
     <Box mb={2}>
-      <Container sx={{ display: 'flex' }}>
-        <Typography variant="h6">{meal}</Typography>
-        <IconButton onClick={() => handleOpenPopup()}>
+      <Container sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="h6" sx={{ color: '#00ffff' }}>{meal}</Typography>
+        <IconButton onClick={() => handleOpenPopup()} sx={{ color: '#00ffff' }}>
           <AddIcon />
         </IconButton>
       </Container>
       <List>
         {items.map((item, index) => (
           <ListItem key={index}>
-            <ListItemText primary={item.name} />
+            <ListItemText primary={item.name} sx={{ color: '#e0e0e0', border: '2px solid #00ffff', padding: '10px' }} />
             <IconButton onClick={() => deleteItem(meal, item.uniqueId!)}>
               <RemoveIcon />
             </IconButton>

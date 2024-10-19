@@ -3,9 +3,10 @@ import Grid from '@mui/material/Unstable_Grid2';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useState } from 'react';
 import { MealItem } from '../../../models/mealItem';
-import Box from '@mui/material/Box';
 import { useCreateProductMutation } from '../../../api/productApi';
 import { CreateProductDTO } from '../../../models/product';
+import React from 'react';
+import { baseGrammPerDish } from '../../../constants';
 
 interface AddProductViewProps {
     handleViewChange: (change: boolean) => void;
@@ -19,6 +20,7 @@ export const AddProductView: React.FC<AddProductViewProps> = ({ handleViewChange
         protein: 0,
         fat: 0,
         carb: 0,
+        quantity: 0,
     });
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,6 +39,7 @@ export const AddProductView: React.FC<AddProductViewProps> = ({ handleViewChange
             protein: formData.protein,
             fat: formData.fat,
             carb: formData.carb,
+            perGram: formData.quantity || baseGrammPerDish,
         }
 
         try {
@@ -78,7 +81,7 @@ export const AddProductView: React.FC<AddProductViewProps> = ({ handleViewChange
                         fullWidth
                         value={formData.protein}
                         onChange={handleChange}
-                        inputProps={{ min: "0" }}
+                        inputProps={{ min: "0", step: "0.01" }}
                     />
                 </Grid>
                 <Grid xs={12} sm={6}>
@@ -91,7 +94,7 @@ export const AddProductView: React.FC<AddProductViewProps> = ({ handleViewChange
                         fullWidth
                         value={formData.fat}
                         onChange={handleChange}
-                        inputProps={{ min: "0" }}
+                        inputProps={{ min: "0", step: "0.01" }}
                     />
                 </Grid>
                 <Grid xs={12} sm={6}>
@@ -104,7 +107,20 @@ export const AddProductView: React.FC<AddProductViewProps> = ({ handleViewChange
                         fullWidth
                         value={formData.carb}
                         onChange={handleChange}
-                        inputProps={{ min: "0" }}
+                        inputProps={{ min: "0", step: "0.01" }}
+                    />
+                </Grid>
+                <Grid xs={12} sm={6}>
+                    <TextField
+                        required
+                        id="quantity"
+                        label="Per dish (g)"
+                        variant="outlined"
+                        type="number"
+                        fullWidth
+                        value={formData.quantity}
+                        onChange={handleChange}
+                        inputProps={{ min: "0", step: "0.01" }}
                     />
                 </Grid>
                 <Grid xs={12}>

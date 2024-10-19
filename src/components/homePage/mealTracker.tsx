@@ -5,21 +5,22 @@ import Box from "@mui/material/Box/Box";
 import { removeMealDailyLogAsync } from "../../thunk/removeMealDailyLogAsync";
 import { GetDailyLogByUserQuery } from "../../api/commands/dailyLog/GetDailyLogByUserQuery";
 import { useGetDailyLogByUserQuery } from "../../api/dailylogApi";
-import { useEffect, useState } from "react";
-import { setMealItems } from "../../store/slicers/mealSlicer";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { changeEatenCal, setMealItems } from "../../store/slicers/mealSlicer";
+import React from "react";
+import CalculationHelper from "../../helpers/calculationHelper";
+import { dispatchCaloriesNormUpdate } from "../../customEvents/updateCaloriesNormEvent";
 
-export const MealTracker: React.FC = () => {
+interface MealTrackerProps {
+  selectedDate: Date | null;
+}
+
+const MealTracker: React.FC<MealTrackerProps> = ({ selectedDate }) => {
   const dispatch = useAppDispatch();
-
-  const [meals, setMeals] = useState<Record<MealType, MealItem[]>>({
-    [MealType.BREAKFAST]: [],
-    [MealType.LUNCH]: [],
-    [MealType.DINNER]: [],
-  });
 
   const getDailyLogByUserQuery: GetDailyLogByUserQuery = {
     dto: {
-      date: new Date().toDateString()
+      date: selectedDate ? selectedDate.toDateString() : new Date().toDateString()
     },
   };
 
@@ -28,39 +29,48 @@ export const MealTracker: React.FC = () => {
 
   const { data, error, isLoading } = useGetDailyLogByUserQuery(getDailyLogByUserQuery);
 
-  useEffect(() => {
-    setMeals({
-      [MealType.BREAKFAST]: allMeals[MealType.BREAKFAST],
-      [MealType.LUNCH]: allMeals[MealType.LUNCH],
-      [MealType.DINNER]: allMeals[MealType.DINNER],
-    });
-  }, [allMeals]);
+  const [meals, setMeals] = useState<Record<MealType, MealItem[]>>({
+    [MealType.BREAKFAST]: [],
+    [MealType.LUNCH]: [],
+    [MealType.DINNER]: [],
+  });
+
+  const initializedMeals = useMemo(() => ({
+    [MealType.BREAKFAST]: Array.isArray(allMeals[MealType.BREAKFAST]) ? allMeals[MealType.BREAKFAST] : [],
+    [MealType.LUNCH]: Array.isArray(allMeals[MealType.LUNCH]) ? allMeals[MealType.LUNCH] : [],
+    [MealType.DINNER]: Array.isArray(allMeals[MealType.DINNER]) ? allMeals[MealType.DINNER] : [],
+  }), [allMeals]);
+
+  const totalCalories = useMemo(() =>
+    Object.values(allMeals).reduce((total, mealItems) =>
+      Array.isArray(mealItems) ? total + mealItems.reduce((mealTotal, item) => mealTotal + CalculationHelper.calculateCalories(item), 0) : total, 0),
+    [allMeals]);
 
   useEffect(() => {
-    if (data && data.Breakfast && data.Lunch && data.Dinner) {
+    setMeals(initializedMeals);
+    dispatch(changeEatenCal(totalCalories));
+    dispatchCaloriesNormUpdate(totalCalories);
+  }, [initializedMeals, totalCalories, dispatch]);
+
+  useEffect(() => {
+    if (data) {
       Object.entries(data).forEach(([mealType, items]) => {
         dispatch(setMealItems({ type: mealType as MealType, items }));
       });
     }
   }, [data, dispatch]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading daily log.</div>;
-
-
-  const deleteItemFromMeal = async (meal: MealType, id: number) => {
+  const deleteItemFromMeal = useCallback(async (meal: MealType, id: number) => {
     try {
-      await dispatch(removeMealDailyLogAsync({ type: meal, id: id }));
-
+      await dispatch(removeMealDailyLogAsync({ type: meal, id }));
       setMeals((prevMeals) => ({
         ...prevMeals,
         [meal]: prevMeals[meal].filter((item) => item.id !== id),
       }));
+    } catch (err) {
+      console.error("Failed to delete item from meal", err);
     }
-    catch {
-
-    }
-  }
+  }, [dispatch]);
 
   return (
     <Box p={2}>
@@ -70,3 +80,5 @@ export const MealTracker: React.FC = () => {
     </Box>
   );
 };
+
+export default React.memo(MealTracker);

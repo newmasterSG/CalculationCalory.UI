@@ -5,6 +5,7 @@ import { NutrientData, Nutrients } from "../../models/nutrientData";
 import { useAppSelector } from "../../hooks/reduxHooks";
 import { MealType } from "../../models/mealItem";
 import Box from '@mui/material/Box';
+import React from 'react';
 
 interface ListNutrinionProps {
     nutrients: NutrientData[];

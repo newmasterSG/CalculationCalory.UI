@@ -6,8 +6,11 @@ export const productApi = createApi({
     reducerPath: 'api',
     baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
-        getProducts: builder.query<ProductDTO[], void>({
-            query: () => 'products',
+        getProducts: builder.query<ProductDTO[], { page?: number; pageSize?: number }>({
+            query: ({ page = 1, pageSize = 10 }) => ({
+                url: 'products',
+                params: { page, pageSize },
+            }),
         }),
 
         createProduct: builder.mutation<ProductDTO, CreateProductCommand>({

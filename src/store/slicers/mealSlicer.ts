@@ -64,6 +64,9 @@ const mealsSlice = createSlice({
         addGeneralCal(state, action: PayloadAction<number>) {
             state.generalCal = action.payload;
         },
+        changeEatenCal(state, action: PayloadAction<number>) {
+            state.totalEatCal = action.payload;
+        },
         removeGeneralCal(state, action: PayloadAction<number>) {
             if (state.generalCal <= 0) {
                 return;
@@ -74,5 +77,5 @@ const mealsSlice = createSlice({
     },
 });
 
-export const { setMealItems, addMealItem, removeMealItem, addGeneralCal } = mealsSlice.actions;
+export const { setMealItems, addMealItem, removeMealItem, addGeneralCal, changeEatenCal } = mealsSlice.actions;
 export default mealsSlice.reducer;
