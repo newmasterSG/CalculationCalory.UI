@@ -1,7 +1,7 @@
 import { ListItem, ListItemText, List, IconButton, TextField } from "@mui/material";
 import { MealItem } from "../../../models/mealItem"
 import AddIcon from '@mui/icons-material/Add';
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import Box from '@mui/material/Box';
 import { ProductDTO } from "../../../models/product";
 import React from "react";
@@ -13,7 +13,7 @@ interface ListProductProps {
     handleNewView: (active: boolean) => void;
 }
 
-export const ListProductPopUp: React.FC<ListProductProps> = ({ items, handleAddProductToList, handleNewView }) => {
+export const ListProductPopUp = forwardRef<HTMLElement, ListProductProps>(({ items, handleAddProductToList, handleNewView }, ref) => {
     const [products, setProducts] = useState(items);
     const [search, setSearch] = useState('');
     const [selectedProduct, setSelectedProduct] = useState<ProductDTO>();
@@ -23,7 +23,7 @@ export const ListProductPopUp: React.FC<ListProductProps> = ({ items, handleAddP
     );
 
     useEffect(() => {
-        if (!items) {
+        if (items) {
             setProducts(items);
         }
     }, [items])
@@ -43,16 +43,16 @@ export const ListProductPopUp: React.FC<ListProductProps> = ({ items, handleAddP
                     <AddIcon></AddIcon>
                 </IconButton>
             </Box>
-            {selectedProduct 
-            ? <AddProductViewWithQuantity product={selectedProduct}  onSubmit={handleAddProductToList}/> 
-            : <List>
-                {filteredProducts.map((product) => (
-                    <ListItem key={product.id}
-                        onClick={(e) => setSelectedProduct(product)}>
-                        <ListItemText primary={product.name} />
-                    </ListItem>
-                ))}
-            </List>}
+            {selectedProduct
+                ? <AddProductViewWithQuantity product={selectedProduct} onSubmit={handleAddProductToList} />
+                : <List>
+                    {filteredProducts.map((product, index) => (
+                        <ListItem key={product.id}
+                            onClick={(e) => setSelectedProduct(product)}>
+                            <ListItemText ref={filteredProducts.length === index + 1 ? ref : null} primary={product.name + `${filteredProducts.length === index + 1}`} sx={{ color: '#e0e0e0', border: '2px solid #00ffff', padding: '10px' }} />
+                        </ListItem>
+                    ))}
+                </List>}
         </>
     )
-}
+});

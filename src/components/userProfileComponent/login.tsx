@@ -12,8 +12,6 @@ const Login: React.FC = () => {
     const [loginData, setLoginData] = useState<LoginRequest>({
         email: '',
         password: '',
-        twoFactorCode: '',
-        twoFactorRecoveryCode: '',
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -55,22 +53,6 @@ const Login: React.FC = () => {
               onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
               margin="normal"
               required
-            />
-            <TextField
-              fullWidth
-              type="text"
-              label="Two-Factor Code"
-              value={loginData.twoFactorCode || ''}
-              onChange={(e) => setLoginData({ ...loginData, twoFactorCode: e.target.value })}
-              margin="normal"
-            />
-            <TextField
-              fullWidth
-              type="text"
-              label="Two-Factor Recovery Code"
-              value={loginData.twoFactorRecoveryCode || ''}
-              onChange={(e) => setLoginData({ ...loginData, twoFactorRecoveryCode: e.target.value })}
-              margin="normal"
             />
             <Button
               type="submit"

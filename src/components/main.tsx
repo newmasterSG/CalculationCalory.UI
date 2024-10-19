@@ -9,6 +9,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AuthGuard from "./AuthComponents/AuthGuard";
 import Login from "./userProfileComponent/login";
 import Register from "./userProfileComponent/register";
+import { mainTheme } from "../themes/mainTheme";
 
 const MainComponent: React.FC = () => {
     const [open, setOpen] = React.useState(false);
@@ -26,7 +27,7 @@ const MainComponent: React.FC = () => {
 
     return (
         <Provider store={store}>
-            <ThemeProvider theme={theme}>
+            <ThemeProvider theme={mainTheme}>
                 <Router>
                     <Sidebar isOpen={open} toggleDrawer={toggleDrawer} />
                     <Routes>

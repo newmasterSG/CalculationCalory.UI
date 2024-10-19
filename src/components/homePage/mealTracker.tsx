@@ -11,12 +11,16 @@ import React from "react";
 import CalculationHelper from "../../helpers/calculationHelper";
 import { dispatchCaloriesNormUpdate } from "../../customEvents/updateCaloriesNormEvent";
 
-const MealTracker: React.FC = () => {
+interface MealTrackerProps {
+  selectedDate: Date | null;
+}
+
+const MealTracker: React.FC<MealTrackerProps> = ({ selectedDate }) => {
   const dispatch = useAppDispatch();
 
   const getDailyLogByUserQuery: GetDailyLogByUserQuery = {
     dto: {
-      date: new Date().toDateString()
+      date: selectedDate ? selectedDate.toDateString() : new Date().toDateString()
     },
   };
 

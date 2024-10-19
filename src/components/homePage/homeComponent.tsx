@@ -10,6 +10,7 @@ import { addGeneralCal } from "../../store/slicers/mealSlicer";
 import { NutrientData } from '../../models/nutrientData';
 import { CALORIES_UPDATE_EVENT } from '../../constants';
 import CalculationHelper from '../../helpers/calculationHelper';
+import DatePicker from '../customComponents/datePicker';
 
 
 
@@ -18,6 +19,12 @@ const Home: React.FC = () => {
   const [nutrients, setNutrients] = useState<NutrientData[]>([]);
   const [caloriesNorm, setCaloriesNorm] = useState<number>(0);
   const { data, isLoading, error } = useGetDailyPlanQuery();
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+
+  const handleDateChange = (date: Date | null) => {
+    setSelectedDate(date);
+  };
 
   const generalCalories: number = useAppSelector((state: RootState) => state.meals.generalCal);
 
@@ -51,13 +58,14 @@ const Home: React.FC = () => {
 
   return (
     <Container component="main" maxWidth="sm">
-      <Paper elevation={3} sx={{ padding: 3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Paper elevation={3} sx={{ padding: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '15px' }}>
         <Typography variant='h5' component="h2" gutterBottom>
           Your daily progress
         </Typography>
         <CircularProgressWithLabel variant="determinate" sx={{ height: '200px !important', width: '200px !important' }} value={caloriesNorm} />
       </Paper>
-      <MealTracker />
+      <DatePicker handleDateChange={handleDateChange} />
+      <MealTracker selectedDate={selectedDate} />
       <ListNutrinion nutrients={nutrients}></ListNutrinion>
 
     </Container>
