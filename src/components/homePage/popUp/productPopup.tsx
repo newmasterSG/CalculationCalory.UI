@@ -2,25 +2,19 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  TextField,
   Button,
-  List,
-  ListItem,
-  ListItemText,
   DialogActions,
-  IconButton,
 } from "@mui/material";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { MealItem, MealType } from "../../../models/mealItem";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
-import { addMealItem } from "../../../store/slicers/mealSlicer";
 import { ListProductPopUp } from "./productListPopUp";
 import { AddProductView } from "./addProductView";
-import Box from "@mui/material/Box";
 import { ProductDTO } from "../../../models/product";
 import { useGetProductsQuery } from "../../../api/productApi";
 import { addMealDailyLogAsync } from "../../../thunk/addMealDailyLogAsync";
 import React from "react";
+import useInfiniteScroll from "../../../hooks/useInfinityScroll";
 
 interface ProductPopupProps {
   open: boolean;
@@ -57,20 +51,15 @@ const ProductPopup: React.FC<ProductPopupProps> = ({ open, onClose, meal }) => {
     } catch {}
   };
 
-  const observer = useRef<IntersectionObserver | null>(null);
-  const lastProductElementRef = useCallback(
-    (node: HTMLElement | null) => {
-      if (isLoading || isFetching) return;
-      if (observer.current) observer.current.disconnect();
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          setPage((prevPage) => prevPage + 1);
-        }
-      });
-      if (node) observer.current.observe(node);
-    },
-    [isLoading, isFetching]
-  );
+  const handleLoadMore = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
+
+  const { lastElementRef } = useInfiniteScroll({
+    isLoading,
+    isFetching,
+    onLoadMore: handleLoadMore,
+  });
 
   const handleNewView = (changeState: boolean) => {
     setNewView(changeState);
@@ -89,7 +78,7 @@ const ProductPopup: React.FC<ProductPopupProps> = ({ open, onClose, meal }) => {
             items={products ?? []}
             handleAddProductToList={handleAddProductToList}
             handleNewView={handleNewView}
-            ref={lastProductElementRef}
+            ref={lastElementRef}
           />
         )}
       </DialogContent>
