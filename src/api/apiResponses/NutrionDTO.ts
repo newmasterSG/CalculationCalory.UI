@@ -1,6 +1,7 @@
 export interface NutrionDTO {
-    protein: number;
-    fat: number;
-    carb: number;
-    dailyCalories: number;
+  protein: number;
+  fat: number;
+  carb: number;
+  dailyCalories: number;
+  streak: number;
 }
