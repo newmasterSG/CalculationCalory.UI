@@ -4,7 +4,7 @@ import { RootState } from "../store/mainStore";
 
 export const calculateTotalNutrient = (
   state: RootState,
-  nutrient: Nutrients
+  nutrient: Nutrients | string
 ): number => {
   const allMeals = [
     ...state.meals[MealType.BREAKFAST],

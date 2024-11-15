@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap");
 
 :root {
   --main-bg-color: #0f0f0f;
@@ -11,13 +11,29 @@
   --hover-border-color: #9400d3;
 }
 
+html,
 body {
-  font-family: 'Orbitron', sans-serif;
+  display: flex;
+  min-height: 100%;
+}
+
+html {
+  flex-direction: column;
+}
+
+body {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+body {
+  font-family: "Orbitron", sans-serif;
 }
 
 .App {
   text-align: center;
   background-color: var(--main-bg-color);
+  height: 100%;
 }
 
 .App-logo {
@@ -53,4 +69,8 @@ body {
   to {
     transform: rotate(360deg);
   }
+}
+
+#root {
+  width: 100%;
 }

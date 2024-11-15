@@ -21,7 +21,7 @@ export const ListNutrinion: React.FC<ListNutrinionProps> = ({ nutrients }) => {
     calculateTotalNutrient(state, Nutrients.FAT)
   );
   const totalCarbs = useAppSelector((state: RootState) =>
-    calculateTotalNutrient(state, Nutrients.Carbs)
+    calculateTotalNutrient(state, "carb")
   );
 
   const updatedNutrients = nutrients.map((nutrient) => {

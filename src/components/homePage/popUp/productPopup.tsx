@@ -32,7 +32,7 @@ const ProductPopup: React.FC<ProductPopupProps> = ({ open, onClose, meal }) => {
 
   useEffect(() => {
     if (data) {
-      setProducts((prevProducts) => [...prevProducts, ...data]);
+      setProducts((prevProducts) => [...prevProducts, ...data.products]);
     }
   }, [data]);
 
@@ -52,6 +52,10 @@ const ProductPopup: React.FC<ProductPopupProps> = ({ open, onClose, meal }) => {
   };
 
   const handleLoadMore = () => {
+    if (!data?.totalPages) return;
+
+    if (page >= data.totalPages) return;
+
     setPage((prevPage) => prevPage + 1);
   };
 
