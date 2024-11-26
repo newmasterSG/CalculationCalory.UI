@@ -12,6 +12,7 @@ import { CALORIES_UPDATE_EVENT } from "../../constants";
 import CalculationHelper from "../../helpers/calculationHelper";
 import DatePicker from "../customComponents/datePicker";
 import StreakComponent from "./StreakComponent";
+import ThemeToggle from "../customComponents/ThemeToggle";
 
 const Home: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -99,12 +100,13 @@ const Home: React.FC = () => {
         <CircularProgressWithLabel
           variant="determinate"
           sx={{ height: "200px !important", width: "200px !important" }}
-          value={caloriesNorm}
+          percent={caloriesNorm}
         />
       </Paper>
       <DatePicker handleDateChange={handleDateChange} />
       <MealTracker selectedDate={selectedDate} />
       <ListNutrinion nutrients={nutrients}></ListNutrinion>
+      <ThemeToggle />
     </Container>
   );
 };
