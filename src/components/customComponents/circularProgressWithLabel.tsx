@@ -5,10 +5,15 @@ import CircularProgress, {
 import Box from "@mui/material/Box";
 import useColorBasedOnValue from "../../hooks/useColorBasedOnValue";
 
+interface CircularProgressWithLabelCustom {
+  percent: number;
+  valuefrompercent?: number;
+}
+
 function CircularProgressWithLabel(
-  props: CircularProgressProps & { value: number }
+  props: CircularProgressProps & CircularProgressWithLabelCustom
 ) {
-  const color = useColorBasedOnValue(props.value);
+  const color = useColorBasedOnValue(props.percent);
 
   const combinedSx = {
     ...props.sx,
@@ -17,7 +22,12 @@ function CircularProgressWithLabel(
 
   return (
     <Box sx={{ position: "relative", display: "inline-flex" }}>
-      <CircularProgress variant="determinate" {...props} sx={combinedSx} />
+      <CircularProgress
+        variant="determinate"
+        {...props}
+        value={props.percent}
+        sx={combinedSx}
+      />
       <Box
         sx={{
           top: 0,
@@ -28,13 +38,22 @@ function CircularProgressWithLabel(
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          flexDirection: "column",
         }}
       >
         <Typography
           variant="caption"
           component="div"
           color="text.secondary"
-        >{`${Math.round(props.value)}%`}</Typography>
+        >{`${Math.round(props.percent)}%`}</Typography>
+
+        {props.valuefrompercent && (
+          <Typography
+            variant="caption"
+            component="div"
+            color="text.secondary"
+          >{`${props.valuefrompercent.toFixed(2)}`}</Typography>
+        )}
       </Box>
     </Box>
   );

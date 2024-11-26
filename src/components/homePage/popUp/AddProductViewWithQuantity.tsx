@@ -41,7 +41,7 @@ const AddProductViewWithQuantity: React.FC<AddProductViewWithQuantityProps> = ({
       <Button onClick={handleSubmit} color="primary">
         Add to Meal
       </Button>
-      <Button onClick={onBack} color="secondary">
+      <Button onClick={onBack} color="primary">
         Back to Product List
       </Button>
     </div>

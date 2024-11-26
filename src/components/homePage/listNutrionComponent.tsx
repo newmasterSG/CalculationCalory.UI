@@ -46,6 +46,7 @@ export const ListNutrinion: React.FC<ListNutrinionProps> = ({ nutrients }) => {
               <NutrientColumn
                 nutrientName={nutrient.name.toString()}
                 percentage={((nutrient.value ?? 0) / nutrient.maxValue) * 100}
+                valuePercentage={nutrient.value ?? 0}
               />
             </GridItemC>
           </Grid>

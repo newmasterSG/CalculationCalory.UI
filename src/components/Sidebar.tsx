@@ -18,7 +18,18 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleDrawer }) => {
   const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+    <Box
+      sx={{
+        width: 250,
+        height: "100%",
+        display: "flex",
+        justifyContent: "space-between",
+        alignContent: "space-between",
+        flexDirection: "column",
+      }}
+      role="presentation"
+      onClick={toggleDrawer(false)}
+    >
       <List>
         <ListItem key={"ClaculationPage"} disablePadding>
           <ListItemButton component={Link} to={`/`}>

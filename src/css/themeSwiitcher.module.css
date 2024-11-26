@@ -1,0 +1,57 @@
+.ThemeSwitchInput {
+  display: none;
+}
+
+.Switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 25px;
+  background: linear-gradient(
+    135deg,
+    var(--main-bg-color),
+    var(--primary-accent-color)
+  );
+  border-radius: 30px;
+  box-shadow: 0 0 10px var(--primary-accent-color),
+    0 0 20px var(--primary-accent-color);
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 25px;
+  transition: 0.3s;
+}
+
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background: var(--primary-accent-color);
+  border-radius: 50%;
+  transition: 0.3s;
+  border: 2px solid var(--main-bg-color);
+  box-shadow: 0 0 10px var(--primary-accent-color),
+    0 0 20px var(--primary-accent-color);
+  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+}
+
+.ThemeSwitchInput:checked + .Switch .slider {
+  background: linear-gradient(135deg, var(--main-bg-color), #00ffff);
+  box-shadow: 0 0 15px #00ffff, 0 0 30px #00ffff;
+}
+
+.ThemeSwitchInput:checked + .Switch .slider::before {
+  transform: translateX(30px);
+  background: var(--main-bg-color);
+  border-color: var(--primary-accent-color);
+  box-shadow: 0 0 15px var(--main-bg-color), 0 0 30px var(--main-bg-color);
+}
